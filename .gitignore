@@ -1,0 +1,21 @@
+# Dependency and build files
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary and generated files
+log/
+tmp/
+storage/           # Only if it's used for Active Storage in development
+vendor/bundle/     # If you use local bundler path
+
+# Tailwind build artifacts (optional)
+public/assets/
+public/packs/
+
+# Docker (optional if you're using it)
+Dockerfile
+.dockerignore
+
+# Local-only files
+Procfile.dev

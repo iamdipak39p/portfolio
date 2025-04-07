@@ -1,0 +1,181 @@
+<!-- app/views/portfolio/index.html.erb -->
+<div class="bg-gray-100 text-gray-900 flex items-center justify-center h-screen mt-0">
+  <div class="container mx-auto px-4 max-w-6xl">
+    
+    <!-- Header -->
+    <header class="py-8 text-center">
+      <% if @profile.avatar.attached? %>
+        <%= image_tag @profile.avatar, class: "mx-auto rounded-full w-48 h-48 mb-6 object-cover border-4 border-blue-500", alt: "Profile" %>
+      <% else %>
+        <div class="mx-auto rounded-full w-48 h-48 mb-6 bg-blue-200 flex items-center justify-center border-4 border-blue-500">
+          <span class="text-4xl text-blue-500"><%= @profile.name.first %></span>
+        </div>
+      <% end %>
+
+      <h1 class="text-5xl font-bold text-blue-600 mb-4"><%= @profile.name %></h1>
+      <p class="text-2xl text-gray-600"><%= @profile.title %></p>
+      <div class="mt-6 space-x-4">
+        <% if @profile.cv_path.present? %>
+          <%= link_to "Download CV", @profile.cv_path, download: File.basename(@profile.cv_path), class: "px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300" %>
+        <% end %>
+
+        <button id="contactBtn" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+          Contact Me
+        </button>
+      </div>
+    </header>
+
+    <!-- Skills Section -->
+    <section class="bg-white shadow-xl rounded-2xl p-8 mb-12 hover:shadow-2xl transition-all duration-300">
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Tech Stack</h2>
+      <div class="grid grid-cols-4 gap-6 text-center">
+        <% @skills.each do |skill| %>
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-md hover:shadow-xl hover:bg-gray-50 transform transition-all duration-300 hover:-translate-y-2 group">
+            <i class="<%= skill.icon_class %> text-5xl <%= skill.color %> mb-4 block transform group-hover:scale-110 transition-transform"></i>
+            <p class="font-semibold text-gray-700 group-hover:text-red-500 transition-colors"><%= skill.name %></p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <% if @projects.any? %>
+      <section class="mb-12">
+        <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Featured Projects</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <% @projects.each do |project| %>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group">
+              <div class="relative overflow-hidden">
+                <% if project.image.attached? %>
+                  <%= image_tag project.image, class: "w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110", alt: project.title %>
+                <% else %>
+                  <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                    <span class="text-gray-400">No image</span>
+                  </div>
+                <% end %>
+                <div class="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4 text-gray-800 group-hover:text-blue-600 transition-colors"><%= project.title %></h3>
+                <p class="text-gray-600 mb-4"><%= project.description %></p>
+                <div class="flex space-x-4">
+                  <% if project.live_url.present? %>
+                    <a href="<%= project.live_url %>" target="_blank"
+                      class="w-full text-center py-2 border bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+                      View Project
+                    </a>
+                  <% end %>
+                  <% if project.github_url.present? %>
+                    <a href="<%= project.github_url %>" target="_blank"
+                      class="w-full text-center py-2 border bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+                      GitHub
+                    </a>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <!-- Contact Section -->
+    <section class="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+      <div class="container mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-6">Let's Connect</h2>
+        <p class="text-xl mb-8">Interested in collaboration or have a project in mind?</p>
+        <div class="space-x-4">
+          <a href="#" class="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100" id="emailBtn">Send Email</a>
+          <a href="#" class="inline-block border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600" id="scheduleBtn">Schedule Call</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-8">
+      <div class="space-x-4 mb-4">
+        <% @social_links.each do |link| %>
+          <a href="<%= link.url %>" class="text-blue-600 hover:text-blue-500" target="_blank">
+            <i class="<%= link.icon_class %> text-2xl"></i>
+          </a>
+        <% end %>
+      </div>
+      <p class="text-gray-500">© <%= Date.today.year %> <%= @profile.name %>. All Rights Reserved.</p>
+    </footer>
+  </div>
+</div>
+
+<!-- Contact Modal -->
+<div id="contactModal" class="fixed inset-0 bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0">
+    <div class="relative bg-gradient-to-r from-purple-500 to-indigo-600 text-white p-6 rounded-t-2xl">
+      <h2 class="text-2xl font-bold">Get in Touch</h2>
+      <button id="closeModal" class="absolute top-4 right-4 text-white hover:rotate-90 transition-transform duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <%= form_with url: "/contact", method: :post, class: "p-6 space-y-4", local: true do |form| %>
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Your Name</label>
+        <%= form.text_field :name, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300", placeholder: "John Doe" %>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Your Email</label>
+        <%= form.email_field :email, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300", placeholder: "john@example.com" %>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Message</label>
+        <%= form.text_area :message, rows: 4, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300", placeholder: "Your message here..." %>
+      </div>
+
+      <div class="flex space-x-4">
+        <button type="button" id="cancelModal" class="flex-1 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-300">
+          Cancel
+        </button>
+        <%= form.submit "Send Message", class: "flex-1 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:opacity-90 transition-opacity duration-300" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Modal JS -->
+<script>
+    const contactBtn = document.getElementById('contactBtn');
+    const contactModal = document.getElementById('contactModal');
+    const modalContent = contactModal.querySelector('.modal-content');
+    const closeModal = document.getElementById('closeModal');
+    const cancelModal = document.getElementById('cancelModal');
+
+    function openModal() {
+      contactModal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-100');
+        modalContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+
+    function closeContactModal() {
+      modalContent.classList.add('scale-95', 'opacity-0');
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      setTimeout(() => {
+        contactModal.classList.add('hidden');
+      }, 300);
+    }
+
+    contactBtn.addEventListener('click', openModal);
+    closeModal.addEventListener('click', closeContactModal);
+    cancelModal.addEventListener('click', closeContactModal);
+
+    window.addEventListener('click', (e) => {
+      if (e.target === contactModal) closeContactModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") closeContactModal();
+    });
+</script>

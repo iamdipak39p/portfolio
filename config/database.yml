@@ -9,3 +9,9 @@ default: &default
 development:
   <<: *default
   database: resume_maker_development
+
+
+  production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+

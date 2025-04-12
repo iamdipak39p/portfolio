@@ -14,7 +14,6 @@ public/assets/
 public/packs/
 
 # Docker (optional if you're using it)
-Dockerfile
 .dockerignore
 
 # Local-only files

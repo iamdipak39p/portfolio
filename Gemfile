@@ -1,3 +1,12 @@
+# Top of your Gemfile
+# force bundler to exclude native gems in Gemfile.lock
+ruby RUBY_VERSION
+
+platforms :ruby do
+  gem "tailwindcss-rails"
+end
+
+
 source "https://rubygems.org"
 
 ruby "3.1.2"

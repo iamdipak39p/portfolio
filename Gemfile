@@ -6,7 +6,6 @@ platforms :ruby do
   gem "tailwindcss-rails"
 end
 
-
 source "https://rubygems.org"
 
 ruby "3.1.2"
@@ -31,9 +30,6 @@ gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-
-# Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
